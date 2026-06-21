@@ -3,34 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taş Kağıt Makas - Pro 5</title>
+  <title>Rock Paper Scissors</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
   <div id="dil-secim">
-    <h2 id="dil-baslik">Select Language / Dil Seçin</h2>
+    <h2 id="dil-baslik">Select Language</h2>
     <div id="dil-liste"></div>
   </div>
 
   <div id="mod-secim" style="display:none">
-    <h2 id="mod-baslik">Oyun Modu / Game Mode</h2>
+    <h2 id="mod-baslik">Game Mode</h2>
     <div id="mod-liste" style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
-      <button class="dil-btn" onclick="modSec('ai')">🤖 Yapay Zekaya Karşı (VS AI)</button>
-      <button class="dil-btn" onclick="modSec('2p')">👥 2 Oyuncu (2 Players)</button>
+      <button class="dil-btn" onclick="modSec('ai')">🤖 VS AI</button>
+      <button class="dil-btn" onclick="modSec('2p')">👥 2 Players</button>
     </div>
   </div>
 
   <div id="isim-secim" style="display:none">
-    <h2 id="isim-baslik">İsimlerinizi girin</h2>
-    <input type="text" id="isim1" placeholder="Oyuncu 1" maxlength="12">
-    <input type="text" id="isim2" placeholder="Oyuncu 2" maxlength="12">
-    <button id="btn-isim-onayla" onclick="isimleriOnayla()">Başla 🎮</button>
+    <h2 id="isim-baslik">Enter your names</h2>
+    <input type="text" id="isim1" placeholder="Player 1" maxlength="12">
+    <input type="text" id="isim2" placeholder="Player 2" maxlength="12">
+    <button id="btn-isim-onayla" onclick="isimleriOnayla()">Start 🎮</button>
   </div>
 
   <div id="oyun" style="display:none">
-    <h1 id="baslik">Taş Kağıt Makas!</h1>
-    <h2 id="tur">👤 1. Oyuncu seçimini yap!</h2>
+    <h1 id="baslik">Rock Paper Scissors!</h1>
+    <h2 id="tur">👤 Player 1, choose!</h2>
     <div id="sure-bar"></div>
     <p id="sure-yazi">8</p>
     <div id="skor">
@@ -39,11 +39,11 @@
       <span id="skor2">0</span>
     </div>
     <div id="butonlar">
-      <button onclick="sec('tas')">🪨 <span id="btn-tas">Taş</span></button>
-      <button onclick="sec('kagit')">📄 <span id="btn-kagit">Kağıt</span></button>
-      <button onclick="sec('makas')">✂️ <span id="btn-makas">Makas</span></button>
+      <button onclick="sec('tas')">🪨 <span id="btn-tas">Rock</span></button>
+      <button onclick="sec('kagit')">📄 <span id="btn-kagit">Paper</span></button>
+      <button onclick="sec('makas')">✂️ <span id="btn-makas">Scissors</span></button>
     </div>
-    <button id="btn-dil-degistir" onclick="dilDegistir()">🌐 Dili Değiştir</button>
+    <button id="btn-dil-degistir" onclick="dilDegistir()">🌐 Change Language</button>
   </div>
 
   <h2 id="sonuc"></h2>

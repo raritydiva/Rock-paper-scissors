@@ -71,7 +71,7 @@ let secilenSkin   = skinler.classic;
 let oyunKurali    = kurallar.normal;
 let oyunKuraliAdi = "normal";
 let aiZorluk      = "medium";  // easy | medium | hard
-let roundLimit    = 5;
+let roundLimit    = 3; // Hata 2 düzeltildi (5 -> 3)
 let roundSayaci   = 0;
 let randomModAktif = false;
 
@@ -95,7 +95,9 @@ function dilSec(dil) {
   document.getElementById("dil-secim").style.display = "none";
   document.getElementById("mod-secim").style.display = "flex";
   document.getElementById("mod-baslik").textContent = secilenDil.modBaslik;
-  const modBtns = document.querySelectorAll("#mod-liste button");
+  
+  // Hata 1 düzeltildi: #mod-liste -> #mod-secim
+  const modBtns = document.querySelectorAll("#mod-secim button");
   if (modBtns[0]) modBtns[0].textContent = secilenDil.modAI;
   if (modBtns[1]) modBtns[1].textContent = secilenDil.mod2P;
 }
@@ -189,6 +191,11 @@ function ayarlariOnayla() {
 }
 
 function isimleriOnayla() {
+  // Hata 5 düzeltildi: Tarayıcı ses politikası için ses motorunu uyandır.
+  if (sesAl().state === 'suspended') {
+    sesAl().resume();
+  }
+
   const i1 = document.getElementById("isim1").value.trim();
   const i2 = document.getElementById("isim2").value.trim();
 
@@ -387,24 +394,36 @@ function sonucGoster() {
 
   if (raundKazanan > 0) konfetiPatlat(25);
 
-  // Easter egg: 10 win streak
+  const macSonu = skor1 >= roundLimit || skor2 >= roundLimit || roundSayaci >= roundLimit * 2;
   const streak = Math.max(winStreak1, winStreak2);
-  if (streak >= 10 && !easterEggAcildi) {
+
+  // Hata 3 düzeltildi: Easter Egg ve Maç Sonu Çakışması
+  if (streak >= 10 && !easterEggAcildi && !macSonu) {
     easterEggAcildi = true;
     setTimeout(() => easterEgg(), 500);
+    return;
   }
 
-  // Maç sonu: round limiti veya 5 puan
-  const macSonu = skor1 >= roundLimit || skor2 >= roundLimit || roundSayaci >= roundLimit * 2;
+  // Maç sonu: round limiti veya max round sayısı (roundLimit * 2)
   if (macSonu) {
     macBitti = true;
-    const nihaiKazanan = skor1 >= skor2 ? oyuncu1Isim : oyuncu2Isim;
+    
+    // Hata 4 düzeltildi: Beraberlikte Haksız Galibiyet engellendi
+    let nihaiKazanan = "";
+    if (skor1 > skor2) {
+      nihaiKazanan = oyuncu1Isim;
+    } else if (skor2 > skor1) {
+      nihaiKazanan = oyuncu2Isim;
+    } else {
+      nihaiKazanan = secilenDil.bera; // Beraberlik
+    }
+
     setTimeout(() => {
       document.getElementById("sonuc").innerHTML = `
         <div style="margin-top:20px;">
           <div style="font-size:3.5rem;">🏆</div>
           <h1 style="font-size:2.8rem;">${nihaiKazanan}</h1>
-          <h2>${secilenDil.macKazandi}</h2>
+          <h2>${nihaiKazanan === secilenDil.bera ? "" : secilenDil.macKazandi}</h2>
           <p style="font-size:1.8rem;">${secilenDil.skor}: ${skor1} - ${skor2}</p>
           <button onclick="isimleriOnayla()" style="
             background: linear-gradient(180deg, #26c89a, #007d5d);
@@ -466,6 +485,7 @@ function sesAl() {
 function tonCal(freq, sure, tip, ses) {
   try {
     const ctx = sesAl();
+    if (ctx.state === 'suspended') ctx.resume();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = tip;
@@ -491,6 +511,7 @@ function sesCombo() {
 function sesFanfar() {
   try {
     const ctx = sesAl();
+    if (ctx.state === 'suspended') ctx.resume();
     const now = ctx.currentTime;
     [
       {f:392,d:0,s:0.15},{f:392,d:0.18,s:0.15},{f:392,d:0.36,s:0.15},
